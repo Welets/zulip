@@ -78,6 +78,7 @@ export const raw_message_schema = z.intersection(
             recipient_id: z.number(),
             sender_email: z.string(),
             sender_full_name: z.string(),
+
             sender_id: z.number(),
             sender_realm_str: z.string(),
             submessages: z.array(submessage_schema),
@@ -175,6 +176,9 @@ export type Message = (
     local_edit_timestamp?: number; // Used for edited messages
 
     notification_sent?: boolean; // Used in message_notifications
+
+    // Добавляем новое свойство
+    cf_value?: string;
 } & (
         | {
               type: "private";
@@ -241,6 +245,7 @@ export function convert_raw_message_to_message_with_booleans(
     message: RawMessage,
 ): MessageWithBooleans {
     const flags = message.flags ?? [];
+    const customData = people.get_custom_profile_data(message.sender_id, 10);
 
     function convert_flag(flag_name: string): boolean {
         return flags.includes(flag_name);
@@ -271,11 +276,13 @@ export function convert_raw_message_to_message_with_booleans(
         return {
             ..._.omit(message, "flags"),
             ...converted_flags,
+            cf_value: customData?.value ?? '' // получаем значение или пустую строку если данных нет
         };
     }
     return {
         ..._.omit(message, "flags"),
         ...converted_flags,
+        cf_value: customData?.value ?? '' // Добавляем и для stream сообщений
     };
 }
 
@@ -297,7 +304,7 @@ export function update_booleans(message: Message, flags: string[]): void {
     message.alerted = convert_flag("has_alert_word");
 }
 
-export function update_sender_full_name(user_id: number, new_name: string): void {
+export function update_sender_full_name(user_id: number, new_name: string, ): void {
     for (const msg of stored_messages.values()) {
         if (msg.sender_id && msg.sender_id === user_id) {
             msg.sender_full_name = new_name;
