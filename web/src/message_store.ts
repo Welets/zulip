@@ -78,7 +78,6 @@ export const raw_message_schema = z.intersection(
             recipient_id: z.number(),
             sender_email: z.string(),
             sender_full_name: z.string(),
-
             sender_id: z.number(),
             sender_realm_str: z.string(),
             submessages: z.array(submessage_schema),
@@ -245,7 +244,7 @@ export function convert_raw_message_to_message_with_booleans(
     message: RawMessage,
 ): MessageWithBooleans {
     const flags = message.flags ?? [];
-    const customData = people.get_custom_profile_data(message.sender_id, 10);
+    const customData = people.get_custom_profile_data(message.sender_id, 2);
 
     function convert_flag(flag_name: string): boolean {
         return flags.includes(flag_name);
@@ -304,7 +303,7 @@ export function update_booleans(message: Message, flags: string[]): void {
     message.alerted = convert_flag("has_alert_word");
 }
 
-export function update_sender_full_name(user_id: number, new_name: string, ): void {
+export function update_sender_full_name(user_id: number, new_name: string): void {
     for (const msg of stored_messages.values()) {
         if (msg.sender_id && msg.sender_id === user_id) {
             msg.sender_full_name = new_name;
