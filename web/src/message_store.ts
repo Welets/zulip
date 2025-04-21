@@ -176,6 +176,9 @@ export type Message = (
     local_edit_timestamp?: number; // Used for edited messages
 
     notification_sent?: boolean; // Used in message_notifications
+
+    // Добавляем новое свойство
+    cf_value?: string;
 } & (
         | {
               type: "private";
@@ -242,7 +245,7 @@ export function convert_raw_message_to_message_with_booleans(
     message: RawMessage,
 ): MessageWithBooleans {
     const flags = message.flags ?? [];
-
+    const customData = people.get_custom_profile_data(message.sender_id, 2);
     function convert_flag(flag_name: string): boolean {
         return flags.includes(flag_name);
     }
@@ -272,11 +275,13 @@ export function convert_raw_message_to_message_with_booleans(
         return {
             ..._.omit(message, "flags"),
             ...converted_flags,
+            cf_value: customData?.value ?? '' // получаем значение или пустую строку если данных нет
         };
     }
     return {
         ..._.omit(message, "flags"),
         ...converted_flags,
+        cf_value: customData?.value ?? '' // Добавляем и для stream сообщений
     };
 }
 

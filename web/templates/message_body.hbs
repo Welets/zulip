@@ -11,6 +11,7 @@
             {{> status_emoji msg/status_emoji_info}}
             {{/unless}}
         </span>
+        <span class="message-custom-field">{{msg/cf_value}}</span>
         {{#if sender_is_bot}}
         <i class="zulip-icon zulip-icon-bot" aria-label="{{t 'Bot' }}"></i>
         {{/if}}

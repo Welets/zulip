@@ -22,6 +22,10 @@
     &.private-message {
         background-color: var(--color-background-private-message-content);
 
+        .date_row {
+            background-color: var(--color-background-private-message-content);
+        }
+
         .data-container::after {
             background: linear-gradient(
                 0deg,
@@ -1070,4 +1074,13 @@ of the base style defined for a read-only textarea in dark mode. */
 
 .trailing_bookend .bookend-channel-settings-link {
     display: inline;
+}
+
+.message-custom-field {
+    display: inline-block;
+    margin-left: 8px;
+    color: var(--color-text-item);
+    font-size: 0.9em;
+    cursor: default;
+    user-select: none;
 }
