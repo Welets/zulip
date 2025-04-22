@@ -5,6 +5,7 @@ class zulip::common {
       $nagios_plugins = 'monitoring-plugins-basic'
       $nagios_plugins_dir = '/usr/lib/nagios/plugins'
       $nginx = 'nginx-full'
+      $nginx = 'nginx-core'
       $supervisor_system_conf_dir = '/etc/supervisor/conf.d'
       $supervisor_conf_file = '/etc/supervisor/supervisord.conf'
       $supervisor_service = 'supervisor'
