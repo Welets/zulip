@@ -1,21 +1,25 @@
 // You won't find every click handler here, but it's a good place to start!
-
+// Third party imports
 import $ from "jquery";
 import assert from "minimalistic-assert";
 import * as tippy from "tippy.js";
 import {z} from "zod";
 
+// Template imports
 import render_buddy_list_tooltip_content from "../templates/buddy_list_tooltip_content.hbs";
 
+// Local imports
 import * as activity_ui from "./activity_ui.ts";
 import * as browser_history from "./browser_history.ts";
 import * as buddy_data from "./buddy_data.ts";
 import * as compose_actions from "./compose_actions.ts";
+import * as compose_banner from "./compose_banner.ts";
 import * as compose_reply from "./compose_reply.ts";
 import * as compose_state from "./compose_state.ts";
 import * as emoji_picker from "./emoji_picker.ts";
 import * as hash_util from "./hash_util.ts";
 import * as hashchange from "./hashchange.ts";
+import {$t} from "./i18n.ts";
 import * as message_edit from "./message_edit.ts";
 import * as message_lists from "./message_lists.ts";
 import * as message_store from "./message_store.ts";
@@ -34,6 +38,7 @@ import * as settings_toggle from "./settings_toggle.ts";
 import * as sidebar_ui from "./sidebar_ui.ts";
 import * as spectators from "./spectators.ts";
 import * as starred_messages_ui from "./starred_messages_ui.ts";
+import * as stream_data from "./stream_data.ts";
 import * as stream_list from "./stream_list.ts";
 import * as stream_popover from "./stream_popover.ts";
 import * as topic_list from "./topic_list.ts";
@@ -655,6 +660,18 @@ export function initialize(): void {
     $("body").on("click", ".channel-new-topic-button", function (this: HTMLElement, e) {
         e.stopPropagation();
         const stream_id = Number.parseInt(this.dataset.streamId!, 10);
+        
+        const sub = stream_data.get_sub_by_id(stream_id);
+        
+        if (!sub || !stream_data.can_create_topics_in_stream(sub)) {
+            compose_banner.show_error_message(
+                $t({defaultMessage: "You do not have permission to create new topics in this channel."}),
+                compose_banner.CLASSNAMES.no_topic_creation_permissions,  // Используем определенный класс
+                $("#compose_banners")
+            );
+            return;
+        }
+        
         compose_actions.start({
             message_type: "stream",
             stream_id,

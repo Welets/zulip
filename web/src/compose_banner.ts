@@ -54,6 +54,7 @@ export const CLASSNAMES = {
     stream_does_not_exist: "stream_does_not_exist",
     missing_stream: "missing_stream",
     no_post_permissions: "no_post_permissions",
+    no_topic_creation_permissions: "no_topic_creation_permissions",
     cannot_send_direct_message: "cannot_send_direct_message",
     missing_private_message_recipient: "missing_private_message_recipient",
     invalid_recipient: "invalid_recipient",

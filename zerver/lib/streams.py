@@ -1779,3 +1779,17 @@ def get_metadata_access_streams_via_group_ids(
         | Q(can_subscribe_group_id__in=group_ids),
         realm_id=realm.id,
     )
+
+
+#def can_create_topics_in_stream(user_profile: UserProfile, stream: Stream) -> bool:
+#    """Check if a user can create new topics in a stream."""
+#    if user_profile.is_realm_admin:
+#        return True
+#        
+#    # Получаем группы пользователя
+#    user_group_ids = set(
+#        get_recursive_membership_groups(user_profile).values_list("id", flat=True)
+#    )
+#    
+#    # Проверяем, входит ли пользователь в группу can_create_topics_group
+#    return stream.can_create_topics_group_id in user_group_ids

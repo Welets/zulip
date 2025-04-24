@@ -49,6 +49,11 @@ let posting_policy_error_message = "";
 export const NO_PERMISSION_TO_POST_IN_CHANNEL_ERROR_MESSAGE = $t({
     defaultMessage: "You do not have permission to post in this channel.",
 });
+
+export const NO_PERMISSION_TO_CREATE_TOPICS_ERROR_MESSAGE = $t({
+    defaultMessage: "You do not have permission to create new topics in this channel.",
+});
+
 export const NO_PRIVATE_RECIPIENT_ERROR_MESSAGE = $t({
     defaultMessage: "Please add a valid recipient.",
 });
@@ -795,6 +800,14 @@ function validate_stream_message(scheduling_message: boolean, show_banner = true
         if (is_validating_compose_box) {
             disabled_send_tooltip_message = NO_PERMISSION_TO_POST_IN_CHANNEL_ERROR_MESSAGE;
             posting_policy_error_message = NO_PERMISSION_TO_POST_IN_CHANNEL_ERROR_MESSAGE;
+        }
+        return false;
+    }
+
+    // Теперь проверяем только права на создание топиков, но не показываем баннер
+    if (compose_state.is_creating_new_topic() && !stream_data.can_create_topics_in_stream(sub)) {
+        if (is_validating_compose_box) {
+            disabled_send_tooltip_message = NO_PERMISSION_TO_CREATE_TOPICS_ERROR_MESSAGE;
         }
         return false;
     }

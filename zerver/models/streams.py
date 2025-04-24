@@ -136,7 +136,12 @@ class Stream(models.Model):
         UserGroup, on_delete=models.RESTRICT, related_name="+"
     )
     can_subscribe_group = models.ForeignKey(UserGroup, on_delete=models.RESTRICT, related_name="+")
-
+    can_create_topics_group = models.ForeignKey(
+        UserGroup,
+        on_delete=models.RESTRICT,
+        related_name="+",
+    )
+    
     # The very first message ID in the stream.  Used to help clients
     # determine whether they might need to display "show all topics" for a
     # stream based on what messages they have cached.
@@ -176,6 +181,13 @@ class Stream(models.Model):
             allow_everyone_group=True,
             default_group_name=SystemGroups.EVERYONE,
         ),
+        "can_create_topics_group": GroupPermissionSetting(
+            require_system_group=False,
+            allow_internet_group=False,
+            allow_nobody_group=True,
+            allow_everyone_group=True,
+            default_group_name=SystemGroups.EVERYONE,
+        ),        
         "can_subscribe_group": GroupPermissionSetting(
             require_system_group=False,
             allow_internet_group=False,
@@ -243,6 +255,7 @@ class Stream(models.Model):
         "can_add_subscribers_group_id",
         "can_administer_channel_group_id",
         "can_send_message_group_id",
+        "can_create_topics_group_id",
         "can_remove_subscribers_group_id",
         "can_subscribe_group_id",
         "is_recently_active",

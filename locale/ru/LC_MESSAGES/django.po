@@ -7132,3 +7132,6 @@ msgstr "Неверный OTP"
 #: zproject/backends.py:3169
 msgid "Can't use both mobile_flow_otp and desktop_flow_otp together."
 msgstr "Нельзя одновременно использовать mobile_flow_otp и desktop_flow_otp."
+
+msgid "Who can create topics"
+msgstr "Кто может создавать темы"

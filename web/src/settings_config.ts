@@ -673,13 +673,14 @@ export const all_group_setting_labels = {
         }),
     },
     stream: {
+        can_create_topics_group: $t({defaultMessage: "Who can create topics"}),
         can_add_subscribers_group: $t({defaultMessage: "Who can subscribe anyone to this channel"}),
         can_send_message_group: $t({defaultMessage: "Who can post to this channel"}),
         can_administer_channel_group: $t({defaultMessage: "Who can administer this channel"}),
         can_subscribe_group: $t({defaultMessage: "Who can subscribe to this channel"}),
         can_remove_subscribers_group: $t({
             defaultMessage: "Who can unsubscribe anyone from this channel",
-        }),
+        }),   
     },
     group: {
         can_add_members_group: $t({defaultMessage: "Who can add members to this group"}),
@@ -768,6 +769,7 @@ export const owner_editable_realm_group_permission_settings = new Set([
 // render assigned permissions in permissions panel.
 export const stream_group_permission_settings: StreamGroupSettingName[] = [
     "can_send_message_group",
+    "can_create_topics_group",
     "can_administer_channel_group",
     "can_subscribe_group",
     "can_add_subscribers_group",

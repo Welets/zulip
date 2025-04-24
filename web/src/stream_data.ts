@@ -776,7 +776,40 @@ export let can_post_messages_in_stream = function (
         sender,
     );
 };
+export let can_create_topics_in_stream = function (
+    stream: StreamSubscription,
+    sender_id: number = current_user.user_id,
+): boolean {
+    if (stream.is_archived) {
+        return false;
+    }
 
+    if (page_params.is_spectator) {
+        return false;
+    }
+
+    let sender: CurrentUser | User;
+    if (sender_id === current_user.user_id) {
+        sender = current_user;
+    } else {
+        sender = people.get_by_user_id(sender_id);
+    }
+    
+    const can_create_topics_group = stream.can_create_topics_group;
+    return settings_data.user_has_permission_for_group_setting(
+        can_create_topics_group,
+        "can_create_topics_group",
+        "stream",
+        sender,
+    );
+};
+
+// Добавляем функцию rewire для тестирования
+export function rewire_can_create_topics_in_stream(
+    value: typeof can_create_topics_in_stream,
+): void {
+    can_create_topics_in_stream = value;
+}
 export function rewire_can_post_messages_in_stream(
     value: typeof can_post_messages_in_stream,
 ): void {

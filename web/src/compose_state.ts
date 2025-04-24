@@ -271,3 +271,17 @@ export function allow_draft_restoring(): void {
 export function can_restore_drafts(): boolean {
     return _can_restore_drafts;
 }
+
+// В compose_state.ts добавим:
+export function is_creating_new_topic(): boolean {
+    // Get current topic value using the function from the same module
+    const current_topic = topic();
+    
+    // Check if we're replying to an existing message
+    const is_reply = Boolean(get_message_type() === "stream" && current_topic !== "");
+    
+    // Check if this is a new topic compose action
+    const is_new_topic = message_type === "stream" && !is_reply;
+    
+    return is_new_topic;
+}
