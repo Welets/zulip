@@ -50,14 +50,4 @@ class Migration(migrations.Migration):
             elidable=True,
             reverse_code=migrations.RunPython.noop,
         ),
-        migrations.AlterField(
-            model_name="stream",
-            name="can_create_topics_group",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.RESTRICT,
-                related_name="+",
-                to="zerver.usergroup",
-                null=False,
-            ),
-        ),
     ]

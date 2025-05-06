@@ -86,6 +86,7 @@ class StreamDict(TypedDict, total=False):
     can_add_subscribers_group: UserGroup | None
     can_administer_channel_group: UserGroup | None
     can_send_message_group: UserGroup | None
+    can_create_topics_group: UserGroup | None
     can_remove_subscribers_group: UserGroup | None
     can_subscribe_group: UserGroup | None
 
@@ -261,6 +262,7 @@ def create_stream_if_needed(
     can_add_subscribers_group: UserGroup | None = None,
     can_administer_channel_group: UserGroup | None = None,
     can_send_message_group: UserGroup | None = None,
+    can_create_topics_group: UserGroup | None = None,
     can_remove_subscribers_group: UserGroup | None = None,
     can_subscribe_group: UserGroup | None = None,
     acting_user: UserProfile | None = None,
@@ -379,6 +381,7 @@ def create_streams_if_needed(
             can_add_subscribers_group=stream_dict.get("can_add_subscribers_group", None),
             can_administer_channel_group=stream_dict.get("can_administer_channel_group", None),
             can_send_message_group=stream_dict.get("can_send_message_group", None),
+            can_create_topics_group=stream_dict.get("can_create_topics_group", None),
             can_remove_subscribers_group=stream_dict.get("can_remove_subscribers_group", None),
             can_subscribe_group=stream_dict.get("can_subscribe_group", None),
             acting_user=acting_user,
@@ -475,6 +478,29 @@ def check_stream_access_based_on_can_send_message_group(
         direct_member_only=False,
     ):
         raise JsonableError(_("You do not have permission to post in this channel."))
+
+
+def check_stream_access_based_on_can_create_topics_group(
+    sender: UserProfile, stream: Stream
+) -> None:
+    if is_cross_realm_bot_email(sender.delivery_email):
+        return
+
+    can_create_topics_group = stream.can_create_topics_group
+    if hasattr(can_create_topics_group, "named_user_group"):
+        if can_create_topics_group.named_user_group.name == SystemGroups.EVERYONE:
+            return
+
+        if can_create_topics_group.named_user_group.name == SystemGroups.NOBODY:
+            raise JsonableError(_("You do not have permission to create topics in this channel."))
+
+    if not user_has_permission_for_group_setting(
+        stream.can_create_topics_group,
+        sender,
+        Stream.stream_permission_group_settings["can_create_topics_group"],
+        direct_member_only=False,
+    ):
+        raise JsonableError(_("You do not have permission to create topics in this channel."))
 
 
 def access_stream_for_send_message(
@@ -1499,6 +1525,7 @@ def stream_to_dict(
         can_add_subscribers_group=can_add_subscribers_group,
         can_administer_channel_group=can_administer_channel_group,
         can_send_message_group=can_send_message_group,
+        can_create_topics_group=can_send_message_group,
         can_remove_subscribers_group=can_remove_subscribers_group,
         can_subscribe_group=can_subscribe_group,
         creator_id=stream.creator_id,
@@ -1781,15 +1808,21 @@ def get_metadata_access_streams_via_group_ids(
     )
 
 
-#def can_create_topics_in_stream(user_profile: UserProfile, stream: Stream) -> bool:
-#    """Check if a user can create new topics in a stream."""
-#    if user_profile.is_realm_admin:
-#        return True
-#        
-#    # Получаем группы пользователя
-#    user_group_ids = set(
-#        get_recursive_membership_groups(user_profile).values_list("id", flat=True)
-#    )
-#    
-#    # Проверяем, входит ли пользователь в группу can_create_topics_group
-#    return stream.can_create_topics_group_id in user_group_ids
+def access_stream_for_create_topic(
+    sender: UserProfile,
+    stream: Stream,
+) -> None:
+    # First check if user has general access to the stream
+    error = _("Invalid channel name '{channel_name}'").format(channel_name=stream.name)
+    try:
+        access_stream_common(sender, stream, error)
+    except JsonableError:
+        raise JsonableError(error)
+    # Then check topic creation permission
+    try:
+        check_stream_access_based_on_can_create_topics_group(sender, stream)
+    except JsonableError as e:
+        if sender.is_bot and sender.bot_owner is not None:
+            check_stream_access_based_on_can_create_topics_group(sender.bot_owner, stream)
+        else:
+            raise JsonableError(e.msg)

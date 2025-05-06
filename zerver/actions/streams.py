@@ -426,6 +426,7 @@ def send_subscription_add_events(
                 can_add_subscribers_group=stream_dict["can_add_subscribers_group"],
                 can_administer_channel_group=stream_dict["can_administer_channel_group"],
                 can_send_message_group=stream_dict["can_send_message_group"],
+                can_create_topics_group=stream_dict["can_create_topics_group"],
                 can_remove_subscribers_group=stream_dict["can_remove_subscribers_group"],
                 can_subscribe_group=stream_dict["can_subscribe_group"],
                 creator_id=stream_dict["creator_id"],

@@ -161,6 +161,7 @@ class RawStreamDict(TypedDict):
     can_add_subscribers_group_id: int
     can_administer_channel_group_id: int
     can_send_message_group_id: int
+    can_create_topics_group_id: int
     can_remove_subscribers_group_id: int
     can_subscribe_group_id: int
     creator_id: int | None
@@ -207,6 +208,7 @@ class SubscriptionStreamDict(TypedDict):
     can_add_subscribers_group: int | UserGroupMembersDict
     can_administer_channel_group: int | UserGroupMembersDict
     can_send_message_group: int | UserGroupMembersDict
+    can_create_topics_group: int | UserGroupMembersDict
     can_remove_subscribers_group: int | UserGroupMembersDict
     can_subscribe_group: int | UserGroupMembersDict
     color: str
@@ -241,6 +243,7 @@ class NeverSubscribedStreamDict(TypedDict):
     can_add_subscribers_group: int | UserGroupMembersDict
     can_administer_channel_group: int | UserGroupMembersDict
     can_send_message_group: int | UserGroupMembersDict
+    can_create_topics_group: int | UserGroupMembersDict
     can_remove_subscribers_group: int | UserGroupMembersDict
     can_subscribe_group: int | UserGroupMembersDict
     creator_id: int | None
@@ -271,6 +274,7 @@ class DefaultStreamDict(TypedDict):
     can_add_subscribers_group: int | UserGroupMembersDict
     can_administer_channel_group: int | UserGroupMembersDict
     can_send_message_group: int | UserGroupMembersDict
+    can_create_topics_group: int | UserGroupMembersDict
     can_remove_subscribers_group: int | UserGroupMembersDict
     can_subscribe_group: int | UserGroupMembersDict
     creator_id: int | None
@@ -299,7 +303,6 @@ class APISubscriptionDict(APIStreamDict):
     """Similar to StreamClientDict, it should contain all the fields specified in
     `zerver.models.Subscription.API_FIELDS` and several additional fields.
     """
-
     audible_notifications: bool | None
     color: str
     desktop_notifications: bool | None
