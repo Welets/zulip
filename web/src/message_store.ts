@@ -275,13 +275,13 @@ export function convert_raw_message_to_message_with_booleans(
         return {
             ..._.omit(message, "flags"),
             ...converted_flags,
-            cf_value: customData?.value ?? '' // получаем значение или пустую строку если данных нет
+            cf_value: customData?.value ?? "", // получаем значение или пустую строку если данных нет
         };
     }
     return {
         ..._.omit(message, "flags"),
         ...converted_flags,
-        cf_value: customData?.value ?? '' // Добавляем и для stream сообщений
+        cf_value: customData?.value ?? "", // Добавляем и для stream сообщений
     };
 }
 

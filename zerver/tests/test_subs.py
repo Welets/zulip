@@ -1,12 +1,13 @@
 import hashlib
 import random
+import unittest
 from collections.abc import Sequence
 from datetime import timedelta
 from io import StringIO
 from typing import TYPE_CHECKING, Any
 from unittest import mock
+
 import orjson
-import unittest
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -250,6 +251,7 @@ class TestMiscStuff(ZulipTestCase):
             include_default=False,
         )
         self.assertEqual(streams, [])
+
     @unittest.skip("Temporarily skipped while implementing can_create_topics_group")
     def test_api_fields(self) -> None:
         """Verify that all the fields from `Stream.API_FIELDS` and `Subscription.API_FIELDS` present

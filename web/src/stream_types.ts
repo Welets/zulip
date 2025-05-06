@@ -16,7 +16,7 @@ export const stream_permission_group_settings_schema = z.enum([
     "can_remove_subscribers_group",
     "can_send_message_group",
     "can_subscribe_group",
-    "can_create_topics_group", 
+    "can_create_topics_group",
 ]);
 export type StreamPermissionGroupSetting = z.infer<typeof stream_permission_group_settings_schema>;
 

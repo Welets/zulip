@@ -1,8 +1,8 @@
-from django.db import migrations, models, transaction
-import django.db.models.deletion
+from django.db import migrations, transaction
 from django.db.backends.base.schema import BaseDatabaseSchemaEditor
 from django.db.migrations.state import StateApps
 from django.db.models import Max, Min, OuterRef
+
 
 def set_default_value_for_can_create_topics_group(
     apps: StateApps, schema_editor: BaseDatabaseSchemaEditor
@@ -16,7 +16,9 @@ def set_default_value_for_can_create_topics_group(
         # Do nothing if there are no channels on the server.
         return
 
-    lower_bound = Stream.objects.filter(can_create_topics_group=None).aggregate(Min("id"))["id__min"]
+    lower_bound = Stream.objects.filter(can_create_topics_group=None).aggregate(Min("id"))[
+        "id__min"
+    ]
 
     while lower_bound <= max_id + BATCH_SIZE / 2:
         upper_bound = lower_bound + BATCH_SIZE - 1
@@ -36,6 +38,7 @@ def set_default_value_for_can_create_topics_group(
             )
 
         lower_bound += BATCH_SIZE
+
 
 class Migration(migrations.Migration):
     atomic = False

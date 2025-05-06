@@ -141,7 +141,7 @@ class Stream(models.Model):
         on_delete=models.RESTRICT,
         related_name="+",
     )
-    
+
     # The very first message ID in the stream.  Used to help clients
     # determine whether they might need to display "show all topics" for a
     # stream based on what messages they have cached.
@@ -187,7 +187,7 @@ class Stream(models.Model):
             allow_nobody_group=True,
             allow_everyone_group=True,
             default_group_name=SystemGroups.EVERYONE,
-        ),        
+        ),
         "can_subscribe_group": GroupPermissionSetting(
             require_system_group=False,
             allow_internet_group=False,

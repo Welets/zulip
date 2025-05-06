@@ -660,18 +660,21 @@ export function initialize(): void {
     $("body").on("click", ".channel-new-topic-button", function (this: HTMLElement, e) {
         e.stopPropagation();
         const stream_id = Number.parseInt(this.dataset.streamId!, 10);
-        
+
         const sub = stream_data.get_sub_by_id(stream_id);
-        
+
         if (!sub || !stream_data.can_create_topics_in_stream(sub)) {
             compose_banner.show_error_message(
-                $t({defaultMessage: "You do not have permission to create new topics in this channel."}),
-                compose_banner.CLASSNAMES.no_topic_creation_permissions,  // Используем определенный класс
-                $("#compose_banners")
+                $t({
+                    defaultMessage:
+                        "You do not have permission to create new topics in this channel.",
+                }),
+                compose_banner.CLASSNAMES.no_topic_creation_permissions, // Используем определенный класс
+                $("#compose_banners"),
             );
             return;
         }
-        
+
         compose_actions.start({
             message_type: "stream",
             stream_id,

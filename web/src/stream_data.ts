@@ -794,7 +794,7 @@ export let can_create_topics_in_stream = function (
     } else {
         sender = people.get_by_user_id(sender_id);
     }
-    
+
     const can_create_topics_group = stream.can_create_topics_group;
     return settings_data.user_has_permission_for_group_setting(
         can_create_topics_group,

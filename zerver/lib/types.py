@@ -303,6 +303,7 @@ class APISubscriptionDict(APIStreamDict):
     """Similar to StreamClientDict, it should contain all the fields specified in
     `zerver.models.Subscription.API_FIELDS` and several additional fields.
     """
+
     audible_notifications: bool | None
     color: str
     desktop_notifications: bool | None

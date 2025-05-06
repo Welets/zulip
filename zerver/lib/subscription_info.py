@@ -73,7 +73,7 @@ def get_web_public_subs(
         )
         can_create_topics_group = get_group_setting_value_for_register_api(
             stream.can_create_topics_group_id, anonymous_group_membership
-        )        
+        )
         can_remove_subscribers_group = get_group_setting_value_for_register_api(
             stream.can_remove_subscribers_group_id, anonymous_group_membership
         )
@@ -191,7 +191,7 @@ def build_stream_api_dict(
     )
     can_create_topics_group = get_group_setting_value_for_register_api(
         raw_stream_dict["can_create_topics_group_id"], anonymous_group_membership
-    )    
+    )
     can_remove_subscribers_group = get_group_setting_value_for_register_api(
         raw_stream_dict["can_remove_subscribers_group_id"], anonymous_group_membership
     )
@@ -342,7 +342,7 @@ def build_stream_dict_for_never_sub(
     )
     can_send_message_group_value = get_group_setting_value_for_register_api(
         raw_stream_dict["can_send_message_group_id"], anonymous_group_membership
-    )    
+    )
     can_remove_subscribers_group_value = get_group_setting_value_for_register_api(
         raw_stream_dict["can_remove_subscribers_group_id"], anonymous_group_membership
     )
